@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/auth";
 import "@/styles/pages.css";
@@ -18,7 +18,7 @@ const LABEL: React.CSSProperties = {
 };
 const FIELD = { marginBottom: 16 };
 
-export default function LoginPage() {
+function LoginPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { sendOTP, verifyOTPAndLogin, verifyOTPAndRegister, isAuthenticated, isLoading, pendingOTP } = useAuth();
@@ -222,6 +222,14 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "80vh" }}><p style={{ color: "#666", fontSize: "14px" }}>Loading...</p></div>}>
+      <LoginPageInner />
+    </Suspense>
   );
 }
 

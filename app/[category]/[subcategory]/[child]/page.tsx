@@ -28,5 +28,5 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default function Page({ params }: Props) {
-  return <CategoryPage params={params} />;
+  return <CategoryPage params={{ slug: [params.category, params.subcategory, params.child] }} />;
 }

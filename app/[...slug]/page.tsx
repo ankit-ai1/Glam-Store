@@ -25,6 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function Page({ params }: Props) {
-  return <CategoryPage params={params} />;
+export default async function Page({ params }: Props) {
+  const resolvedParams = await params;
+  return <CategoryPage params={resolvedParams} />;
 }

@@ -1,13 +1,13 @@
 "use client";
 import { useAuth } from "@/lib/auth";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, ReactNode } from "react";
+import { useEffect, ReactNode, Suspense } from "react";
 
 interface ProtectedRouteProps {
   children: ReactNode;
 }
 
-export default function ProtectedRoute({ children }: ProtectedRouteProps) {
+function ProtectedRouteInner({ children }: ProtectedRouteProps) {
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -15,12 +15,10 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      // Redirect to login with intended route as query param
       router.push(`/login?redirect=${encodeURIComponent(currentPath)}`);
     }
   }, [isLoading, isAuthenticated, router, currentPath]);
 
-  // Show loading state while checking authentication
   if (isLoading) {
     return (
       <div style={{
@@ -50,10 +48,21 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     );
   }
 
-  // Prevent flashing protected content before auth validation
   if (!isAuthenticated) {
     return null;
   }
 
   return children;
+}
+
+export default function ProtectedRoute({ children }: ProtectedRouteProps) {
+  return (
+    <Suspense fallback={
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "80vh" }}>
+        <p style={{ color: "#666", fontSize: "14px" }}>Loading...</p>
+      </div>
+    }>
+      <ProtectedRouteInner>{children}</ProtectedRouteInner>
+    </Suspense>
+  );
 }
