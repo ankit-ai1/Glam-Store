@@ -16,38 +16,38 @@ export default function ProductCard({ p, badge }: { p: Product; badge?: string }
   const carted = inCart(p.id);
 
   return (
-    <div className="product-card">
-      <div className="product-img-wrap">
-        <img src={p.img} alt={p.name} className="product-img" />
-        {badge && <span className="product-badge" style={{ background: p.badgeBg || "#673ab7" }}>{badge}</span>}
-        <button className={`product-wishlist-btn${wished ? " active" : ""}`}
-          onClick={() => dispatch({ type: "TOGGLE_WISH", id: p.id })}>
-          {wished ? "❤️" : "🤍"}
-        </button>
-      </div>
-      <div className="product-body">
-        <p className="product-brand" style={{ color: p.brandColor || "#673ab7" }}>{p.brand}</p>
-        <Link href={`/products/${p.id}`}>
+    <Link href={`/products/${p.id}`} style={{ textDecoration: "none", display: "block" }}>
+      <div className="product-card">
+        <div className="product-img-wrap">
+          <img src={p.img} alt={p.name} className="product-img" />
+          {badge && <span className="product-badge" style={{ background: p.badgeBg || "#673ab7" }}>{badge}</span>}
+          <button className={`product-wishlist-btn${wished ? " active" : ""}`}
+            onClick={e => { e.preventDefault(); e.stopPropagation(); dispatch({ type: "TOGGLE_WISH", id: p.id }); }}>
+            {wished ? "❤️" : "🤍"}
+          </button>
+        </div>
+        <div className="product-body">
+          <p className="product-brand" style={{ color: p.brandColor || "#673ab7" }}>{p.brand}</p>
           <p className="product-name line-clamp-2">{p.name}</p>
-        </Link>
-        <div className="product-rating">
-          <div className="product-rating-pill">
-            <Star size={10} fill="white" color="white" />
-            <span>{p.rating}</span>
+          <div className="product-rating">
+            <div className="product-rating-pill">
+              <Star size={10} fill="white" color="white" />
+              <span>{p.rating}</span>
+            </div>
+            <span className="product-rating-count">({p.reviews})</span>
           </div>
-          <span className="product-rating-count">({p.reviews})</span>
+          <div className="product-price">
+            <span className="product-price-curr">₹{p.price}</span>
+            <span className="product-price-mrp">₹{p.mrp}</span>
+            <span className="product-price-off">{p.discount}% OFF</span>
+          </div>
+          <button
+            className={`product-add-btn${carted ? " added" : ""}`}
+            onClick={e => { e.preventDefault(); e.stopPropagation(); dispatch({ type: "ADD", item: { id: p.id, name: p.name, brand: p.brand, price: p.price, mrp: p.mrp, img: p.img } }); }}>
+            🛍 {carted ? "Added" : "Add to Bag"}
+          </button>
         </div>
-        <div className="product-price">
-          <span className="product-price-curr">₹{p.price}</span>
-          <span className="product-price-mrp">₹{p.mrp}</span>
-          <span className="product-price-off">{p.discount}% OFF</span>
-        </div>
-        <button
-          className={`product-add-btn${carted ? " added" : ""}`}
-          onClick={() => dispatch({ type: "ADD", item: { id: p.id, name: p.name, brand: p.brand, price: p.price, mrp: p.mrp, img: p.img } })}>
-          🛍 {carted ? "Added" : "Add to Bag"}
-        </button>
       </div>
-    </div>
+    </Link>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Filter, ChevronDown, SlidersHorizontal, X } from "lucide-react";
 import { CATEGORIES, SUBCATEGORIES, getCategoryMetadata } from "@/lib/categories";
 import { ALL_PRODUCTS } from "@/lib/data";
@@ -30,46 +31,46 @@ export default function CategoryPage({ params }: CategoryPageProps) {
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  // Resolve params
-  const { slug = [] } = params;
-  const categoryPath = slug.join("/");
+  // Always derive path from the live URL — more reliable than params across route handlers
+  const pathname = usePathname();
+  const pathParts = pathname.split("/").filter(Boolean);
+
+  const categoryPath = pathParts.join("/");
+  const mainCategory = CATEGORIES.find((c) => c.slug === pathParts[0]);
+  // Parent tabs: always the main category's direct children, visible at every level
+  const parentTabs = mainCategory?.children || [];
+  // Highlight whichever subcategory matches the current URL segment
+  const activeSubSlug = pathParts.length >= 2 ? pathParts[1] : null;
 
   // Find category configuration
   let categoryTitle = "Products";
   let categoryDescription = "Browse our collection";
-  let categoryBanner = "https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1200&q=80";
-  let subCategories: typeof SUBCATEGORIES["makeup/face"] = [];
 
-  if (slug.length === 1) {
-    // First level category (e.g., /makeup)
-    const mainCategory = CATEGORIES.find((c) => c.slug === slug[0]);
+  if (pathParts.length === 1) {
     if (mainCategory) {
       categoryTitle = mainCategory.label;
       categoryDescription = `Explore our exclusive collection of ${mainCategory.label.toLowerCase()}`;
-      subCategories = mainCategory.children || [];
     }
-  } else if (slug.length >= 2) {
-    // Second level category (e.g., /makeup/face)
-    const mainCategory = CATEGORIES.find((c) => c.slug === slug[0]);
-    const subCategory = mainCategory?.children?.find((c) => c.slug === slug[1]);
-
+  } else if (pathParts.length >= 2) {
+    const subCategory = mainCategory?.children?.find((c) => c.slug === pathParts[1]);
     if (subCategory) {
       categoryTitle = `${subCategory.label} ${mainCategory?.label}`;
       categoryDescription = subCategory.description || `Shop ${subCategory.label}`;
-
-      // Get sub-subcategories if available
-      const subcatKey = `${slug[0]}/${slug[1]}`;
-      if (SUBCATEGORIES[subcatKey]) {
-        subCategories = SUBCATEGORIES[subcatKey];
-      }
     }
   }
 
   // Get metadata
   const metadata = getCategoryMetadata(categoryPath);
 
-  // Filter products (mock - in real app, would filter by category)
-  let products = ALL_PRODUCTS.slice(0, 20);
+  // Filter products by current URL path
+  let products = ALL_PRODUCTS.filter((p) => {
+    if (!p.category) return false;
+    if (pathParts.length >= 2) {
+      return p.category === pathParts[0] && p.subcategory === pathParts[1];
+    }
+    return p.category === pathParts[0];
+  });
+
 
   // Sort products
   if (sortBy === "price-low") {
@@ -147,7 +148,7 @@ export default function CategoryPage({ params }: CategoryPageProps) {
       </div>
 
       {/* Sub-categories tabs */}
-      {subCategories.length > 0 && (
+      {parentTabs.length > 0 && (
         <div
           style={{
             maxWidth: "1400px",
@@ -159,33 +160,40 @@ export default function CategoryPage({ params }: CategoryPageProps) {
           }}
         >
           <div style={{ display: "flex", gap: "12px", minWidth: "min-content" }}>
-            {subCategories.map((sub) => (
-              <Link
-                key={sub.id}
-                href={`/${slug[0]}/${sub.slug}`}
-                style={{
-                  padding: "8px 16px",
-                  borderRadius: "999px",
-                  background: "#f5f0ff",
-                  color: "#673ab7",
-                  textDecoration: "none",
-                  fontSize: "13px",
-                  fontWeight: 600,
-                  whiteSpace: "nowrap",
-                  transition: "all 0.2s",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "#673ab7";
-                  e.currentTarget.style.color = "#fff";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "#f5f0ff";
-                  e.currentTarget.style.color = "#673ab7";
-                }}
-              >
-                {sub.label}
-              </Link>
-            ))}
+            {parentTabs.map((sub) => {
+              const isActive = sub.slug === activeSubSlug;
+              return (
+                <Link
+                  key={sub.id}
+                  href={`/${pathParts[0]}/${sub.slug}`}
+                  style={{
+                    padding: "8px 16px",
+                    borderRadius: "999px",
+                    background: isActive ? "#673ab7" : "#f5f0ff",
+                    color: isActive ? "#fff" : "#673ab7",
+                    textDecoration: "none",
+                    fontSize: "13px",
+                    fontWeight: 600,
+                    whiteSpace: "nowrap",
+                    transition: "all 0.2s",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.background = "#673ab7";
+                      e.currentTarget.style.color = "#fff";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) {
+                      e.currentTarget.style.background = "#f5f0ff";
+                      e.currentTarget.style.color = "#673ab7";
+                    }
+                  }}
+                >
+                  {sub.label}
+                </Link>
+              );
+            })}
           </div>
         </div>
       )}
@@ -286,11 +294,19 @@ export default function CategoryPage({ params }: CategoryPageProps) {
             </div>}
 
             {/* Products Grid */}
-            <div className="products-grid">
-              {products.map((p) => (
-                <ProductCard key={p.id} p={p} badge={p.discount + "%"} />
-              ))}
-            </div>
+            {products.length === 0 ? (
+              <div style={{ textAlign: "center", padding: "60px 20px" }}>
+                <div style={{ fontSize: 48, marginBottom: 16 }}>🔍</div>
+                <p style={{ fontSize: 18, fontWeight: 700, color: "#1a1a2e", marginBottom: 8 }}>No Results Found</p>
+                <p style={{ fontSize: 14, color: "#888" }}>No products available in this category yet.</p>
+              </div>
+            ) : (
+              <div className="products-grid">
+                {products.map((p) => (
+                  <ProductCard key={p.id} p={p} badge={p.discount + "%"} />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
