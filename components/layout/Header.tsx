@@ -50,7 +50,19 @@ export default function Header() {
 
         {/* Main row */}
         <div className="header-main">
-          {/* Logo */}
+
+          {/* Mobile: hamburger + brand name (hidden on desktop) */}
+          <div className="header-mobile-left">
+            <button className="header-mobile-menu-btn" onClick={() => setMobileOpen(p => !p)}>
+              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+            <Link href="/" className="header-mobile-brand">
+              <span className="header-mobile-brand-name">Glam Store</span>
+              <span className="header-mobile-brand-sub">✦ Luxury Beauty</span>
+            </Link>
+          </div>
+
+          {/* Logo — desktop only */}
           <Link href="/" className="header-logo">
             <div className="header-logo-circle">G</div>
             <div className="header-logo-text">
@@ -59,7 +71,7 @@ export default function Header() {
             </div>
           </Link>
 
-          {/* Search */}
+          {/* Search (hidden on mobile) */}
           <div className="header-search">
             <input
               type="text"
@@ -74,20 +86,23 @@ export default function Header() {
 
           {/* Icons */}
           <div className="header-icons">
+            {/* Wishlist — always visible */}
             <Link href="/wishlist" className="header-icon-btn">
               <Heart size={18} />
               {mounted && state.wishlist.length > 0 && (
                 <span className="header-cart-badge">{state.wishlist.length}</span>
               )}
             </Link>
-            <Link href="/cart" className="header-icon-btn">
+
+            {/* Cart — hidden on mobile (in bottom nav) */}
+            <Link href="/cart" className="header-icon-btn header-cart-icon">
               <ShoppingBag size={18} />
               {mounted && cartCount > 0 && (
                 <span className="header-cart-badge">{cartCount}</span>
               )}
             </Link>
 
-            {/* Auth Section */}
+            {/* Profile — always visible */}
             {mounted && !isLoading && (
               isAuthenticated && user ? (
                 <div style={{ position: "relative" }}>
@@ -101,75 +116,16 @@ export default function Header() {
                       alt={user.name}
                       style={{ width: "28px", height: "28px", borderRadius: "50%", objectFit: "cover" }}
                     />
-                    <span style={{ fontSize: "12px", fontWeight: 600, color: "#1a1a2e", maxWidth: "72px", overflow: "hidden", textOverflow: "ellipsis", display: "var(--name-display, inline)" }} className="header-user-name">
+                    <span style={{ fontSize: "12px", fontWeight: 600, color: "#1a1a2e", maxWidth: "72px", overflow: "hidden", textOverflow: "ellipsis" }} className="header-user-name">
                       {user.name}
                     </span>
                   </button>
-
-                  {/* Profile Dropdown */}
                   {profileOpen && (
-                    <div style={{
-                      position: "absolute",
-                      top: "100%",
-                      right: 0,
-                      marginTop: "8px",
-                      background: "#fff",
-                      border: "1px solid #e5dff0",
-                      borderRadius: "8px",
-                      boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                      zIndex: 300,
-                      minWidth: "180px",
-                      overflow: "hidden",
-                    }}>
-                      <Link
-                        href="/profile"
-                        onClick={() => setProfileOpen(false)}
-                        style={{
-                          display: "block",
-                          padding: "12px 16px",
-                          color: "#1a1a2e",
-                          fontSize: "14px",
-                          fontWeight: 500,
-                          borderBottom: "1px solid #f0eaf8",
-                          textDecoration: "none",
-                        }}
-                      >
-                        My Profile
-                      </Link>
-                      <Link
-                        href="/profile/orders"
-                        onClick={() => setProfileOpen(false)}
-                        style={{
-                          display: "block",
-                          padding: "12px 16px",
-                          color: "#1a1a2e",
-                          fontSize: "14px",
-                          fontWeight: 500,
-                          borderBottom: "1px solid #f0eaf8",
-                          textDecoration: "none",
-                        }}
-                      >
-                        My Orders
-                      </Link>
-                      <button
-                        onClick={handleLogout}
-                        style={{
-                          width: "100%",
-                          padding: "12px 16px",
-                          background: "none",
-                          border: "none",
-                          color: "#c33",
-                          fontSize: "14px",
-                          fontWeight: 500,
-                          cursor: "pointer",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "8px",
-                          textAlign: "left",
-                        }}
-                      >
-                        <LogOut size={16} />
-                        Logout
+                    <div style={{ position: "absolute", top: "100%", right: 0, marginTop: "8px", background: "#fff", border: "1px solid #e5dff0", borderRadius: "8px", boxShadow: "0 4px 12px rgba(0,0,0,0.1)", zIndex: 300, minWidth: "180px", overflow: "hidden" }}>
+                      <Link href="/profile" onClick={() => setProfileOpen(false)} style={{ display: "block", padding: "12px 16px", color: "#1a1a2e", fontSize: "14px", fontWeight: 500, borderBottom: "1px solid #f0eaf8", textDecoration: "none" }}>My Profile</Link>
+                      <Link href="/profile/orders" onClick={() => setProfileOpen(false)} style={{ display: "block", padding: "12px 16px", color: "#1a1a2e", fontSize: "14px", fontWeight: 500, borderBottom: "1px solid #f0eaf8", textDecoration: "none" }}>My Orders</Link>
+                      <button onClick={handleLogout} style={{ width: "100%", padding: "12px 16px", background: "none", border: "none", color: "#c33", fontSize: "14px", fontWeight: 500, cursor: "pointer", display: "flex", alignItems: "center", gap: "8px" }}>
+                        <LogOut size={16} /> Logout
                       </button>
                     </div>
                   )}
@@ -180,10 +136,6 @@ export default function Header() {
                 </Link>
               )
             )}
-
-            <button className="header-icon-btn header-mobile-menu-btn" onClick={() => setMobileOpen(p => !p)}>
-              {mobileOpen ? <X size={18} /> : <Menu size={18} />}
-            </button>
           </div>
         </div>
 

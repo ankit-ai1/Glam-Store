@@ -50,8 +50,8 @@ export default function HomePage() {
     <div style={{ width: "100%", overflowX: "hidden" }}>
 
       {/* Hero */}
-      <section className="section" style={{ paddingTop: 28, paddingBottom: 32 }}>
-        <div className="container"><HeroBanner /></div>
+      <section className="section" style={{ paddingTop: 0, paddingBottom: 0 }}>
+        <div className="container" style={{ padding: 0, maxWidth: "100%" }}><HeroBanner /></div>
       </section>
 
       {/* Category */}
