@@ -568,100 +568,165 @@
   .blog-grid        { grid-template-columns: repeat(2, 1fr); }
 }
 
-/* Mobile landscape / large phone */
+/* ── MOBILE (≤768px) – Nykaa style ── */
 @media (max-width: 768px) {
-  .section          { padding: 36px 0; }
-  .container        { padding: 0 14px; }
+  .section        { padding: 24px 0; }
+  .container      { padding: 0 0; }
+  .section-title  { font-size: 1.2rem; }
+  .section-label  { font-size: 9px; }
 
-  /* Hero */
-  .hero-banner      { min-height: 240px; border-radius: 12px; }
-  .hero-bg-img      { width: 50%; opacity: 0.35; }
-  .hero-content     { padding: 28px 20px; max-width: 100%; }
-  .hero-title       { font-size: 1.55rem; }
-  .hero-desc        { font-size: 13px; margin-bottom: 20px; }
-  .hero-btn         { padding: 10px 22px; font-size: 12px; }
+  /* Add bottom padding so content isn't hidden behind bottom nav */
+  body { padding-bottom: 64px; }
 
-  /* Grids */
-  .category-grid    { grid-template-columns: repeat(4, 1fr); gap: 10px; }
-  .promo-grid       { grid-template-columns: 1fr; gap: 12px; }
-  .products-grid    { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .blog-grid        { grid-template-columns: 1fr; gap: 14px; }
-  .trust-grid       { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  /* Show bottom nav */
+  .mobile-bottom-nav { display: flex !important; }
 
-  /* Category item */
-  .category-item    { padding: 14px 8px; gap: 6px; }
-  .category-icon-wrap { width: 44px; height: 44px; font-size: 20px; }
-  .category-name    { font-size: 11px; }
+  /* ── HERO ── */
+  .hero-banner    { min-height: 220px; border-radius: 0; margin: 0; }
+  .hero-bg-img    { width: 60%; opacity: 0.5; }
+  .hero-overlay   { background: linear-gradient(90deg, #1a0a2e 40%, rgba(26,10,46,0.7) 65%, transparent); }
+  .hero-content   { padding: 24px 16px; max-width: 100%; }
+  .hero-title     { font-size: 1.5rem; }
+  .hero-desc      { font-size: 12px; margin-bottom: 16px; max-width: 220px; }
+  .hero-btn       { padding: 10px 20px; font-size: 12px; }
+  .hero-dots      { bottom: 12px; }
 
-  /* Promo card */
-  .promo-card       { height: 180px; }
+  /* Section header padding */
+  .section > .container,
+  .section-alt > .container,
+  .section-dark > .container {
+    padding: 0 14px;
+  }
+
+  /* ── CATEGORIES → horizontal scroll ── */
+  .category-grid {
+    display: flex !important;
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 0;
+    padding: 4px 14px 12px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    grid-template-columns: unset !important;
+  }
+  .category-grid::-webkit-scrollbar { display: none; }
+  .category-item {
+    flex-shrink: 0;
+    width: 76px;
+    padding: 10px 6px 12px;
+    gap: 8px;
+    border-radius: 14px;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+  .category-item:hover { transform: none; }
+  .category-icon-wrap {
+    width: 52px; height: 52px;
+    font-size: 22px;
+    border-radius: 50%;
+    box-shadow: 0 3px 10px rgba(103,58,183,0.15);
+  }
+  .category-name { font-size: 10px; font-weight: 700; }
+
+  /* ── PROMO → horizontal scroll ── */
+  .promo-grid {
+    display: flex !important;
+    overflow-x: auto;
+    gap: 10px;
+    padding: 4px 14px 8px;
+    scrollbar-width: none;
+    grid-template-columns: unset !important;
+  }
+  .promo-grid::-webkit-scrollbar { display: none; }
+  .promo-card { flex-shrink: 0; width: 260px; height: 160px; border-radius: 14px; }
   .promo-card-title { font-size: 15px; }
 
-  /* Timer */
-  .timer-block      { font-size: 14px; padding: 5px 8px; min-width: 36px; }
-  .timer-label      { font-size: 8px; }
+  /* ── PRODUCTS ── */
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 0 14px;
+  }
+  .product-body   { padding: 10px; gap: 4px; }
+  .product-name   { font-size: 12px; }
+  .product-price-curr { font-size: 13px; }
+  .product-add-btn { font-size: 11px; padding: 8px 0; }
 
-  /* Blog */
-  .blog-img         { height: 160px; }
-  .blog-title       { font-size: 14px; }
+  /* ── BRANDS ── */
+  .brands-grid {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding: 4px 14px 8px;
+    gap: 14px;
+    scrollbar-width: none;
+  }
+  .brands-grid::-webkit-scrollbar { display: none; }
+  .brand-item   { width: 66px; flex-shrink: 0; }
+  .brand-circle { width: 52px; height: 52px; font-size: 12px; }
+  .brand-name   { font-size: 10px; }
 
-  /* Concern chips */
-  .concern-chip     { padding: 8px 16px; font-size: 12px; }
+  /* ── CONCERN → horizontal scroll ── */
+  .concern-grid {
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding: 4px 14px 8px;
+    scrollbar-width: none;
+    gap: 8px;
+  }
+  .concern-grid::-webkit-scrollbar { display: none; }
+  .concern-chip { flex-shrink: 0; padding: 8px 16px; font-size: 12px; }
 
-  /* Section title */
-  .section-title    { font-size: 1.4rem; }
+  /* ── BLOG ── */
+  .blog-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 0 14px;
+  }
+  .blog-img   { height: 180px; }
+  .blog-title { font-size: 14px; }
+
+  /* ── TRUST ── */
+  .trust-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .trust-icon { width: 52px; height: 52px; font-size: 18px; }
+  .trust-title { font-size: 12px; }
+  .trust-sub  { font-size: 11px; }
+
+  /* ── TIMER ── */
+  .timer-block { font-size: 14px; padding: 5px 8px; min-width: 36px; }
+  .timer-label { font-size: 8px; }
+
+  /* Section header padding fix */
+  .section > div > div:first-child,
+  .section-alt > div > div:first-child {
+    padding-left: 14px;
+  }
 }
 
-/* Mobile portrait / small phone */
+/* ── SMALL MOBILE (≤480px) ── */
 @media (max-width: 480px) {
-  .section          { padding: 28px 0; }
-  .container        { padding: 0 12px; }
+  .section        { padding: 20px 0; }
 
   /* Hero */
-  .hero-banner      { min-height: 200px; border-radius: 10px; }
-  .hero-bg-img      { display: none; }
-  .hero-overlay     { background: rgba(26,10,46,0.75); }
-  .hero-content     { padding: 24px 16px; }
-  .hero-title       { font-size: 1.35rem; }
-  .hero-desc        { display: none; }
+  .hero-banner    { min-height: 200px; }
+  .hero-bg-img    { width: 55%; opacity: 0.4; }
+  .hero-content   { padding: 20px 14px; }
+  .hero-title     { font-size: 1.35rem; }
+  .hero-desc      { font-size: 11px; max-width: 190px; }
 
-  /* Grids */
-  .category-grid    { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  .products-grid    { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .trust-grid       { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  /* Categories */
+  .category-icon-wrap { width: 48px; height: 48px; font-size: 20px; }
+  .category-item  { width: 68px; }
 
-  /* Product card */
-  .product-body     { padding: 10px; gap: 4px; }
-  .product-name     { font-size: 12px; }
-  .product-price-curr { font-size: 13px; }
-  .product-add-btn  { font-size: 11px; padding: 8px 0; }
-
-  /* Category item */
-  .category-item    { padding: 10px 6px; gap: 5px; border-radius: 12px; }
-  .category-icon-wrap { width: 38px; height: 38px; font-size: 17px; }
-  .category-name    { font-size: 10px; }
-
-  /* Brand */
-  .brand-item       { width: 60px; }
-  .brand-circle     { width: 46px; height: 46px; font-size: 11px; }
-  .brand-name       { font-size: 10px; }
+  /* Products */
+  .products-grid  { gap: 8px; padding: 0 12px; }
+  .promo-card     { width: 230px; height: 150px; }
 
   /* Trust */
-  .trust-icon       { width: 52px; height: 52px; font-size: 18px; }
-  .trust-title      { font-size: 12px; }
-  .trust-sub        { font-size: 11px; }
+  .trust-grid     { grid-template-columns: repeat(2, 1fr); gap: 12px; }
 
   /* Timer */
-  .timer-block      { font-size: 13px; padding: 4px 7px; min-width: 30px; }
-
-  /* Section */
-  .section-title    { font-size: 1.25rem; }
-}
-
-/* Very small phones */
-@media (max-width: 360px) {
-  .category-grid    { grid-template-columns: repeat(3, 1fr); gap: 6px; }
-  .products-grid    { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-  .trust-grid       { grid-template-columns: 1fr 1fr; gap: 10px; }
-  .concern-chip     { padding: 7px 12px; font-size: 11px; }
+  .timer-block    { font-size: 13px; padding: 4px 7px; min-width: 30px; }
 }

@@ -4,6 +4,7 @@ import { CartProvider } from "@/lib/cart";
 import { AuthProvider } from "@/lib/auth";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import MobileBottomNav from "@/components/layout/MobileBottomNav";
 
 export const metadata: Metadata = {
   title: "Glam Store – Luxury Beauty & Cosmetics Online",
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Header />
             <main style={{ minHeight: "100vh", width: "100%", overflowX: "hidden" }}>{children}</main>
             <Footer />
+            <MobileBottomNav />
           </CartProvider>
         </AuthProvider>
       </body>

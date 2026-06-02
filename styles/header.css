@@ -240,28 +240,86 @@
 .mega-cta { display: flex; align-items: center; justify-content: center; }
 .mega-cta-link { background: linear-gradient(90deg,#673ab7,#9c27b0); color: #fff; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-weight: 800; }
 
-/* Mobile */
+/* Mobile left group — hidden on desktop */
+.header-mobile-left   { display: none; }
+.header-mobile-brand  { display: flex; flex-direction: column; text-decoration: none; }
+.header-mobile-brand-name {
+  font-size: 16px;
+  font-weight: 900;
+  color: #1a1a2e;
+  letter-spacing: 0.04em;
+  font-style: italic;
+  line-height: 1.1;
+  background: linear-gradient(90deg, #673ab7, #e91e8c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.header-mobile-brand-sub {
+  font-size: 8px;
+  font-weight: 700;
+  color: #b09acc;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  -webkit-text-fill-color: #b09acc;
+}
+
+/* Hamburger button base */
 .header-mobile-menu-btn { display: none; }
 
 @media (max-width: 768px) {
   .header-user-name       { display: none !important; }
   .header-top-bar         { font-size: 11px; padding: 5px 12px; gap: 10px; }
   .header-top-bar .top-bar-links { display: none; }
-
-  .header-main            { grid-template-columns: auto auto 1fr auto; gap: 8px; height: 56px; padding: 0 14px; }
-  .header-logo-text       { display: none; }
-  .header-search          { display: none; }   /* search moved to mobile drawer */
   .header-nav             { display: none; }
-  .header-mobile-menu-btn { display: flex; }
 
+  /* 2-col mobile header: [☰ Glam Store] [icons] */
+  .header-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 52px;
+    padding: 0 12px;
+    gap: 0;
+  }
+
+  /* Show mobile left group, hide desktop logo */
+  .header-mobile-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+  }
+  .header-logo            { display: none; }
+  .header-search          { display: none; }
+
+  /* Hamburger button */
+  .header-mobile-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: none;
+    color: #673ab7;
+    flex-shrink: 0;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  /* Icons — right side */
+  .header-icons           { gap: 4px; flex-shrink: 0; }
   .header-icon-btn        { width: 36px; height: 36px; }
-  .header-icons           { gap: 4px; }
+
+  /* Hide cart (it's in bottom nav) */
+  .header-cart-icon       { display: none; }
 }
 
 @media (max-width: 480px) {
   .header-top-bar         { font-size: 10px; }
-  .header-main            { height: 52px; padding: 0 12px; gap: 6px; }
-  .header-logo-circle     { width: 30px; height: 30px; font-size: 13px; }
+  .header-main            { height: 50px; padding: 0 10px; }
+  .header-mobile-brand-name { font-size: 15px; }
 }
 
 /* Mobile drawer search bar */
